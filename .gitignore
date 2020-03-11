@@ -22,6 +22,9 @@ DerivedData
 *.xcuserstate
 project.xcworkspace
 
+# Expo
+.expo
+
 # Android/IntelliJ
 #
 build/
