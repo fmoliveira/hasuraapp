@@ -1,0 +1,403 @@
+schema {
+  query: query_root
+  mutation: mutation_root
+  subscription: subscription_root
+}
+
+# expression to compare columns of type Int. All fields are combined with logical 'AND'.
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+# mutation root
+type mutation_root {
+  # delete data from the table: "Test"
+  delete_Test(
+    # filter the rows which have to be deleted
+    where: Test_bool_exp!
+  ): Test_mutation_response
+
+  # insert data into the table: "Test"
+  insert_Test(
+    # the rows to be inserted
+    objects: [Test_insert_input!]!
+
+    # on conflict condition
+    on_conflict: Test_on_conflict
+  ): Test_mutation_response
+
+  # update data of the table: "Test"
+  update_Test(
+    # increments the integer columns with given value of the filtered values
+    _inc: Test_inc_input
+
+    # sets the columns of the filtered rows to the given values
+    _set: Test_set_input
+
+    # filter the rows which have to be updated
+    where: Test_bool_exp!
+  ): Test_mutation_response
+}
+
+# column ordering options
+enum order_by {
+  # in the ascending order, nulls last
+  asc
+
+  # in the ascending order, nulls first
+  asc_nulls_first
+
+  # in the ascending order, nulls last
+  asc_nulls_last
+
+  # in the descending order, nulls first
+  desc
+
+  # in the descending order, nulls first
+  desc_nulls_first
+
+  # in the descending order, nulls last
+  desc_nulls_last
+}
+
+# query root
+type query_root {
+  # fetch data from the table: "Test"
+  Test(
+    # distinct select on columns
+    distinct_on: [Test_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [Test_order_by!]
+
+    # filter the rows returned
+    where: Test_bool_exp
+  ): [Test!]!
+
+  # fetch aggregated fields from the table: "Test"
+  Test_aggregate(
+    # distinct select on columns
+    distinct_on: [Test_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [Test_order_by!]
+
+    # filter the rows returned
+    where: Test_bool_exp
+  ): Test_aggregate!
+
+  # fetch data from the table: "Test" using primary key columns
+  Test_by_pk(id: Int!): Test
+}
+
+# expression to compare columns of type String. All fields are combined with logical 'AND'.
+input String_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String!]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+# subscription root
+type subscription_root {
+  # fetch data from the table: "Test"
+  Test(
+    # distinct select on columns
+    distinct_on: [Test_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [Test_order_by!]
+
+    # filter the rows returned
+    where: Test_bool_exp
+  ): [Test!]!
+
+  # fetch aggregated fields from the table: "Test"
+  Test_aggregate(
+    # distinct select on columns
+    distinct_on: [Test_select_column!]
+
+    # limit the number of rows returned
+    limit: Int
+
+    # skip the first n rows. Use only with order_by
+    offset: Int
+
+    # sort the rows by one or more columns
+    order_by: [Test_order_by!]
+
+    # filter the rows returned
+    where: Test_bool_exp
+  ): Test_aggregate!
+
+  # fetch data from the table: "Test" using primary key columns
+  Test_by_pk(id: Int!): Test
+}
+
+# columns and relationships of "Test"
+type Test {
+  id: Int!
+  name: String!
+}
+
+# aggregated selection of "Test"
+type Test_aggregate {
+  aggregate: Test_aggregate_fields
+  nodes: [Test!]!
+}
+
+# aggregate fields of "Test"
+type Test_aggregate_fields {
+  avg: Test_avg_fields
+  count(columns: [Test_select_column!], distinct: Boolean): Int
+  max: Test_max_fields
+  min: Test_min_fields
+  stddev: Test_stddev_fields
+  stddev_pop: Test_stddev_pop_fields
+  stddev_samp: Test_stddev_samp_fields
+  sum: Test_sum_fields
+  var_pop: Test_var_pop_fields
+  var_samp: Test_var_samp_fields
+  variance: Test_variance_fields
+}
+
+# order by aggregate values of table "Test"
+input Test_aggregate_order_by {
+  avg: Test_avg_order_by
+  count: order_by
+  max: Test_max_order_by
+  min: Test_min_order_by
+  stddev: Test_stddev_order_by
+  stddev_pop: Test_stddev_pop_order_by
+  stddev_samp: Test_stddev_samp_order_by
+  sum: Test_sum_order_by
+  var_pop: Test_var_pop_order_by
+  var_samp: Test_var_samp_order_by
+  variance: Test_variance_order_by
+}
+
+# input type for inserting array relation for remote table "Test"
+input Test_arr_rel_insert_input {
+  data: [Test_insert_input!]!
+  on_conflict: Test_on_conflict
+}
+
+# aggregate avg on columns
+type Test_avg_fields {
+  id: Float
+}
+
+# order by avg() on columns of table "Test"
+input Test_avg_order_by {
+  id: order_by
+}
+
+# Boolean expression to filter rows from the table "Test". All fields are combined with a logical 'AND'.
+input Test_bool_exp {
+  _and: [Test_bool_exp]
+  _not: Test_bool_exp
+  _or: [Test_bool_exp]
+  id: Int_comparison_exp
+  name: String_comparison_exp
+}
+
+# unique or primary key constraints on table "Test"
+enum Test_constraint {
+  # unique or primary key constraint
+  Test_pkey
+}
+
+# input type for incrementing integer columne in table "Test"
+input Test_inc_input {
+  id: Int
+}
+
+# input type for inserting data into table "Test"
+input Test_insert_input {
+  id: Int
+  name: String
+}
+
+# aggregate max on columns
+type Test_max_fields {
+  id: Int
+  name: String
+}
+
+# order by max() on columns of table "Test"
+input Test_max_order_by {
+  id: order_by
+  name: order_by
+}
+
+# aggregate min on columns
+type Test_min_fields {
+  id: Int
+  name: String
+}
+
+# order by min() on columns of table "Test"
+input Test_min_order_by {
+  id: order_by
+  name: order_by
+}
+
+# response of any mutation on the table "Test"
+type Test_mutation_response {
+  # number of affected rows by the mutation
+  affected_rows: Int!
+
+  # data of the affected rows by the mutation
+  returning: [Test!]!
+}
+
+# input type for inserting object relation for remote table "Test"
+input Test_obj_rel_insert_input {
+  data: Test_insert_input!
+  on_conflict: Test_on_conflict
+}
+
+# on conflict condition type for table "Test"
+input Test_on_conflict {
+  constraint: Test_constraint!
+  update_columns: [Test_update_column!]!
+  where: Test_bool_exp
+}
+
+# ordering options when selecting data from "Test"
+input Test_order_by {
+  id: order_by
+  name: order_by
+}
+
+# select columns of table "Test"
+enum Test_select_column {
+  # column name
+  id
+
+  # column name
+  name
+}
+
+# input type for updating data in table "Test"
+input Test_set_input {
+  id: Int
+  name: String
+}
+
+# aggregate stddev on columns
+type Test_stddev_fields {
+  id: Float
+}
+
+# order by stddev() on columns of table "Test"
+input Test_stddev_order_by {
+  id: order_by
+}
+
+# aggregate stddev_pop on columns
+type Test_stddev_pop_fields {
+  id: Float
+}
+
+# order by stddev_pop() on columns of table "Test"
+input Test_stddev_pop_order_by {
+  id: order_by
+}
+
+# aggregate stddev_samp on columns
+type Test_stddev_samp_fields {
+  id: Float
+}
+
+# order by stddev_samp() on columns of table "Test"
+input Test_stddev_samp_order_by {
+  id: order_by
+}
+
+# aggregate sum on columns
+type Test_sum_fields {
+  id: Int
+}
+
+# order by sum() on columns of table "Test"
+input Test_sum_order_by {
+  id: order_by
+}
+
+# update columns of table "Test"
+enum Test_update_column {
+  # column name
+  id
+
+  # column name
+  name
+}
+
+# aggregate var_pop on columns
+type Test_var_pop_fields {
+  id: Float
+}
+
+# order by var_pop() on columns of table "Test"
+input Test_var_pop_order_by {
+  id: order_by
+}
+
+# aggregate var_samp on columns
+type Test_var_samp_fields {
+  id: Float
+}
+
+# order by var_samp() on columns of table "Test"
+input Test_var_samp_order_by {
+  id: order_by
+}
+
+# aggregate variance on columns
+type Test_variance_fields {
+  id: Float
+}
+
+# order by variance() on columns of table "Test"
+input Test_variance_order_by {
+  id: order_by
+}
+
