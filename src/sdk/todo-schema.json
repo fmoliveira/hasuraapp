@@ -1,0 +1,31 @@
+{
+  "title": "todo schema",
+  "version": 0,
+  "description": "describes a list of todos",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "primary": true
+    },
+    "text": {
+      "type": "string"
+    },
+    "completed": {
+      "type": "boolean"
+    },
+    "deleted": {
+      "type": "boolean"
+    },
+    "createdAt": {
+      "type": "string"
+    },
+    "updatedAt": {
+      "type": "string"
+    },
+    "deletedAt": {
+      "type": "string"
+    }
+  },
+  "required": ["text"]
+}
