@@ -4,47 +4,59 @@ schema {
   subscription: subscription_root
 }
 
-# expression to compare columns of type Int. All fields are combined with logical 'AND'.
-input Int_comparison_exp {
-  _eq: Int
-  _gt: Int
-  _gte: Int
-  _in: [Int!]
+# expression to compare columns of type Boolean. All fields are combined with logical 'AND'.
+input Boolean_comparison_exp {
+  _eq: Boolean
+  _gt: Boolean
+  _gte: Boolean
+  _in: [Boolean!]
   _is_null: Boolean
-  _lt: Int
-  _lte: Int
-  _neq: Int
-  _nin: [Int!]
+  _lt: Boolean
+  _lte: Boolean
+  _neq: Boolean
+  _nin: [Boolean!]
+}
+
+scalar date
+
+# expression to compare columns of type date. All fields are combined with logical 'AND'.
+input date_comparison_exp {
+  _eq: date
+  _gt: date
+  _gte: date
+  _in: [date!]
+  _is_null: Boolean
+  _lt: date
+  _lte: date
+  _neq: date
+  _nin: [date!]
 }
 
 # mutation root
 type mutation_root {
-  # delete data from the table: "Test"
-  delete_Test(
+  # delete data from the table: "todo"
+  delete_todo(
     # filter the rows which have to be deleted
-    where: Test_bool_exp!
-  ): Test_mutation_response
+    where: todo_bool_exp!
+  ): todo_mutation_response
 
-  # insert data into the table: "Test"
-  insert_Test(
+  # insert data into the table: "todo"
+  insert_todo(
     # the rows to be inserted
-    objects: [Test_insert_input!]!
+    objects: [todo_insert_input!]!
 
     # on conflict condition
-    on_conflict: Test_on_conflict
-  ): Test_mutation_response
+    on_conflict: todo_on_conflict
+  ): todo_mutation_response
 
-  # update data of the table: "Test"
-  update_Test(
-    # increments the integer columns with given value of the filtered values
-    _inc: Test_inc_input
-
+  # update data of the table: "todo"
+  update_todo(
     # sets the columns of the filtered rows to the given values
-    _set: Test_set_input
+    _set: todo_set_input
 
     # filter the rows which have to be updated
-    where: Test_bool_exp!
-  ): Test_mutation_response
+    where: todo_bool_exp!
+  ): todo_mutation_response
 }
 
 # column ordering options
@@ -70,10 +82,10 @@ enum order_by {
 
 # query root
 type query_root {
-  # fetch data from the table: "Test"
-  Test(
+  # fetch data from the table: "todo"
+  todo(
     # distinct select on columns
-    distinct_on: [Test_select_column!]
+    distinct_on: [todo_select_column!]
 
     # limit the number of rows returned
     limit: Int
@@ -82,16 +94,16 @@ type query_root {
     offset: Int
 
     # sort the rows by one or more columns
-    order_by: [Test_order_by!]
+    order_by: [todo_order_by!]
 
     # filter the rows returned
-    where: Test_bool_exp
-  ): [Test!]!
+    where: todo_bool_exp
+  ): [todo!]!
 
-  # fetch aggregated fields from the table: "Test"
-  Test_aggregate(
+  # fetch aggregated fields from the table: "todo"
+  todo_aggregate(
     # distinct select on columns
-    distinct_on: [Test_select_column!]
+    distinct_on: [todo_select_column!]
 
     # limit the number of rows returned
     limit: Int
@@ -100,14 +112,14 @@ type query_root {
     offset: Int
 
     # sort the rows by one or more columns
-    order_by: [Test_order_by!]
+    order_by: [todo_order_by!]
 
     # filter the rows returned
-    where: Test_bool_exp
-  ): Test_aggregate!
+    where: todo_bool_exp
+  ): todo_aggregate!
 
-  # fetch data from the table: "Test" using primary key columns
-  Test_by_pk(id: Int!): Test
+  # fetch data from the table: "todo" using primary key columns
+  todo_by_pk(id: String!): todo
 }
 
 # expression to compare columns of type String. All fields are combined with logical 'AND'.
@@ -131,10 +143,10 @@ input String_comparison_exp {
 
 # subscription root
 type subscription_root {
-  # fetch data from the table: "Test"
-  Test(
+  # fetch data from the table: "todo"
+  todo(
     # distinct select on columns
-    distinct_on: [Test_select_column!]
+    distinct_on: [todo_select_column!]
 
     # limit the number of rows returned
     limit: Int
@@ -143,16 +155,16 @@ type subscription_root {
     offset: Int
 
     # sort the rows by one or more columns
-    order_by: [Test_order_by!]
+    order_by: [todo_order_by!]
 
     # filter the rows returned
-    where: Test_bool_exp
-  ): [Test!]!
+    where: todo_bool_exp
+  ): [todo!]!
 
-  # fetch aggregated fields from the table: "Test"
-  Test_aggregate(
+  # fetch aggregated fields from the table: "todo"
+  todo_aggregate(
     # distinct select on columns
-    distinct_on: [Test_select_column!]
+    distinct_on: [todo_select_column!]
 
     # limit the number of rows returned
     limit: Int
@@ -161,243 +173,209 @@ type subscription_root {
     offset: Int
 
     # sort the rows by one or more columns
-    order_by: [Test_order_by!]
+    order_by: [todo_order_by!]
 
     # filter the rows returned
-    where: Test_bool_exp
-  ): Test_aggregate!
+    where: todo_bool_exp
+  ): todo_aggregate!
 
-  # fetch data from the table: "Test" using primary key columns
-  Test_by_pk(id: Int!): Test
+  # fetch data from the table: "todo" using primary key columns
+  todo_by_pk(id: String!): todo
 }
 
-# columns and relationships of "Test"
-type Test {
-  id: Int!
-  name: String!
+# columns and relationships of "todo"
+type todo {
+  completed: Boolean!
+  createdAt: date!
+  deleted: Boolean!
+  deletedAt: date!
+  id: String!
+  text: String!
+  updatedAt: date!
 }
 
-# aggregated selection of "Test"
-type Test_aggregate {
-  aggregate: Test_aggregate_fields
-  nodes: [Test!]!
+# aggregated selection of "todo"
+type todo_aggregate {
+  aggregate: todo_aggregate_fields
+  nodes: [todo!]!
 }
 
-# aggregate fields of "Test"
-type Test_aggregate_fields {
-  avg: Test_avg_fields
-  count(columns: [Test_select_column!], distinct: Boolean): Int
-  max: Test_max_fields
-  min: Test_min_fields
-  stddev: Test_stddev_fields
-  stddev_pop: Test_stddev_pop_fields
-  stddev_samp: Test_stddev_samp_fields
-  sum: Test_sum_fields
-  var_pop: Test_var_pop_fields
-  var_samp: Test_var_samp_fields
-  variance: Test_variance_fields
+# aggregate fields of "todo"
+type todo_aggregate_fields {
+  count(columns: [todo_select_column!], distinct: Boolean): Int
+  max: todo_max_fields
+  min: todo_min_fields
 }
 
-# order by aggregate values of table "Test"
-input Test_aggregate_order_by {
-  avg: Test_avg_order_by
+# order by aggregate values of table "todo"
+input todo_aggregate_order_by {
   count: order_by
-  max: Test_max_order_by
-  min: Test_min_order_by
-  stddev: Test_stddev_order_by
-  stddev_pop: Test_stddev_pop_order_by
-  stddev_samp: Test_stddev_samp_order_by
-  sum: Test_sum_order_by
-  var_pop: Test_var_pop_order_by
-  var_samp: Test_var_samp_order_by
-  variance: Test_variance_order_by
+  max: todo_max_order_by
+  min: todo_min_order_by
 }
 
-# input type for inserting array relation for remote table "Test"
-input Test_arr_rel_insert_input {
-  data: [Test_insert_input!]!
-  on_conflict: Test_on_conflict
+# input type for inserting array relation for remote table "todo"
+input todo_arr_rel_insert_input {
+  data: [todo_insert_input!]!
+  on_conflict: todo_on_conflict
 }
 
-# aggregate avg on columns
-type Test_avg_fields {
-  id: Float
+# Boolean expression to filter rows from the table "todo". All fields are combined with a logical 'AND'.
+input todo_bool_exp {
+  _and: [todo_bool_exp]
+  _not: todo_bool_exp
+  _or: [todo_bool_exp]
+  completed: Boolean_comparison_exp
+  createdAt: date_comparison_exp
+  deleted: Boolean_comparison_exp
+  deletedAt: date_comparison_exp
+  id: String_comparison_exp
+  text: String_comparison_exp
+  updatedAt: date_comparison_exp
 }
 
-# order by avg() on columns of table "Test"
-input Test_avg_order_by {
-  id: order_by
-}
-
-# Boolean expression to filter rows from the table "Test". All fields are combined with a logical 'AND'.
-input Test_bool_exp {
-  _and: [Test_bool_exp]
-  _not: Test_bool_exp
-  _or: [Test_bool_exp]
-  id: Int_comparison_exp
-  name: String_comparison_exp
-}
-
-# unique or primary key constraints on table "Test"
-enum Test_constraint {
+# unique or primary key constraints on table "todo"
+enum todo_constraint {
   # unique or primary key constraint
-  Test_pkey
+  todo_pkey
 }
 
-# input type for incrementing integer columne in table "Test"
-input Test_inc_input {
-  id: Int
-}
-
-# input type for inserting data into table "Test"
-input Test_insert_input {
-  id: Int
-  name: String
+# input type for inserting data into table "todo"
+input todo_insert_input {
+  completed: Boolean
+  createdAt: date
+  deleted: Boolean
+  deletedAt: date
+  id: String
+  text: String
+  updatedAt: date
 }
 
 # aggregate max on columns
-type Test_max_fields {
-  id: Int
-  name: String
+type todo_max_fields {
+  createdAt: date
+  deletedAt: date
+  id: String
+  text: String
+  updatedAt: date
 }
 
-# order by max() on columns of table "Test"
-input Test_max_order_by {
+# order by max() on columns of table "todo"
+input todo_max_order_by {
+  createdAt: order_by
+  deletedAt: order_by
   id: order_by
-  name: order_by
+  text: order_by
+  updatedAt: order_by
 }
 
 # aggregate min on columns
-type Test_min_fields {
-  id: Int
-  name: String
+type todo_min_fields {
+  createdAt: date
+  deletedAt: date
+  id: String
+  text: String
+  updatedAt: date
 }
 
-# order by min() on columns of table "Test"
-input Test_min_order_by {
+# order by min() on columns of table "todo"
+input todo_min_order_by {
+  createdAt: order_by
+  deletedAt: order_by
   id: order_by
-  name: order_by
+  text: order_by
+  updatedAt: order_by
 }
 
-# response of any mutation on the table "Test"
-type Test_mutation_response {
+# response of any mutation on the table "todo"
+type todo_mutation_response {
   # number of affected rows by the mutation
   affected_rows: Int!
 
   # data of the affected rows by the mutation
-  returning: [Test!]!
+  returning: [todo!]!
 }
 
-# input type for inserting object relation for remote table "Test"
-input Test_obj_rel_insert_input {
-  data: Test_insert_input!
-  on_conflict: Test_on_conflict
+# input type for inserting object relation for remote table "todo"
+input todo_obj_rel_insert_input {
+  data: todo_insert_input!
+  on_conflict: todo_on_conflict
 }
 
-# on conflict condition type for table "Test"
-input Test_on_conflict {
-  constraint: Test_constraint!
-  update_columns: [Test_update_column!]!
-  where: Test_bool_exp
+# on conflict condition type for table "todo"
+input todo_on_conflict {
+  constraint: todo_constraint!
+  update_columns: [todo_update_column!]!
+  where: todo_bool_exp
 }
 
-# ordering options when selecting data from "Test"
-input Test_order_by {
+# ordering options when selecting data from "todo"
+input todo_order_by {
+  completed: order_by
+  createdAt: order_by
+  deleted: order_by
+  deletedAt: order_by
   id: order_by
-  name: order_by
+  text: order_by
+  updatedAt: order_by
 }
 
-# select columns of table "Test"
-enum Test_select_column {
+# select columns of table "todo"
+enum todo_select_column {
+  # column name
+  completed
+
+  # column name
+  createdAt
+
+  # column name
+  deleted
+
+  # column name
+  deletedAt
+
   # column name
   id
 
   # column name
-  name
+  text
+
+  # column name
+  updatedAt
 }
 
-# input type for updating data in table "Test"
-input Test_set_input {
-  id: Int
-  name: String
+# input type for updating data in table "todo"
+input todo_set_input {
+  completed: Boolean
+  createdAt: date
+  deleted: Boolean
+  deletedAt: date
+  id: String
+  text: String
+  updatedAt: date
 }
 
-# aggregate stddev on columns
-type Test_stddev_fields {
-  id: Float
-}
+# update columns of table "todo"
+enum todo_update_column {
+  # column name
+  completed
 
-# order by stddev() on columns of table "Test"
-input Test_stddev_order_by {
-  id: order_by
-}
+  # column name
+  createdAt
 
-# aggregate stddev_pop on columns
-type Test_stddev_pop_fields {
-  id: Float
-}
+  # column name
+  deleted
 
-# order by stddev_pop() on columns of table "Test"
-input Test_stddev_pop_order_by {
-  id: order_by
-}
+  # column name
+  deletedAt
 
-# aggregate stddev_samp on columns
-type Test_stddev_samp_fields {
-  id: Float
-}
-
-# order by stddev_samp() on columns of table "Test"
-input Test_stddev_samp_order_by {
-  id: order_by
-}
-
-# aggregate sum on columns
-type Test_sum_fields {
-  id: Int
-}
-
-# order by sum() on columns of table "Test"
-input Test_sum_order_by {
-  id: order_by
-}
-
-# update columns of table "Test"
-enum Test_update_column {
   # column name
   id
 
   # column name
-  name
-}
+  text
 
-# aggregate var_pop on columns
-type Test_var_pop_fields {
-  id: Float
-}
-
-# order by var_pop() on columns of table "Test"
-input Test_var_pop_order_by {
-  id: order_by
-}
-
-# aggregate var_samp on columns
-type Test_var_samp_fields {
-  id: Float
-}
-
-# order by var_samp() on columns of table "Test"
-input Test_var_samp_order_by {
-  id: order_by
-}
-
-# aggregate variance on columns
-type Test_variance_fields {
-  id: Float
-}
-
-# order by variance() on columns of table "Test"
-input Test_variance_order_by {
-  id: order_by
+  # column name
+  updatedAt
 }
 
